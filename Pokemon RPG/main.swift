@@ -5,7 +5,8 @@
 //  Created by Magali Bensalah on 27/05/2021.
 //
 
-import Foundation
+var game = Game()
 
-print("Hello, World!")
+game.start()
+
 
