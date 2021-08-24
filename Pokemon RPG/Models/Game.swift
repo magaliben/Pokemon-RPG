@@ -9,10 +9,8 @@ import Foundation
 
 struct Game {
     
-    
-    var playerTurn = PlayerTurn.playerOne
     var currentPlayer = "Joueur 1"
-       
+    
     mutating func start() {
         playerOne.createTeam(with: playerOneWeapons)
         playerTwo.createTeam(with: playerTwoWeapons)
@@ -30,31 +28,30 @@ struct Game {
         2 : soigner un personnage de votre équipe ?
         """)
             
-            var choice = ""
+            var isPlayerSwitched = false
             
             repeat {
                 if let actionChoice = readLine(), !actionChoice.isEmpty, actionChoice == "1" || actionChoice == "2" {
-                    choice = actionChoice
                     if actionChoice == "1"  {
-                        print("Vous avez choisi d'attaquer un personnage adverse")
-                        print("Veuillez choisir un personnage de votre équipe pour attaquer votre adversaire")
-                        self.showPlayerTeam()
-                    } else if actionChoice == "2" {
+                        
+                        self.attack()
+                    } else {
                         print("Vous avez choisi de soigner un personnage de votre équipe")
                         print("Veuillez choisir un personnage de votre équipe afin de le soigner")
                         self.showPlayerTeam()
                         if self.currentPlayer == "Joueur 1" {
                             playerOne.treatCharacter() {
                                 self.switchPlayer()
+                                isPlayerSwitched = true
                             }
                         } else {
                             playerTwo.treatCharacter() {
                                 self.switchPlayer()
+                                isPlayerSwitched = true
                             }
                         }
                     }
                     //appeler la fonction permettant de soigner ou la fonction d'attaquer
-                    
                 } else {
                     print("""
         Veuillez faire un choix entre
@@ -62,7 +59,7 @@ struct Game {
         2 : soigner un personnage de votre équipe
         """)
                 }
-            } while choice != "1" || choice != "2"
+            } while !isPlayerSwitched
         } while playerOne.hasTeamAlive() && playerTwo.hasTeamAlive()
     }
     
@@ -75,7 +72,40 @@ struct Game {
     }
     
     func attack() {
-        
+        print("Vous avez choisi d'attaquer un personnage adverse")
+        print("Veuillez choisir un personnage de votre équipe pour attaquer votre adversaire")
+        self.showPlayerTeam()
+        var choice = ""
+        repeat {
+            let playerWhoAttacks = self.currentPlayer == "Joueur 1" ? playerOne : playerTwo
+            repeat {
+                if let actionChoice = readLine(), !actionChoice.isEmpty, actionChoice != "0", Int(actionChoice) ?? 99 <= playerWhoAttacks.characters.count {
+                    choice = actionChoice
+                    
+                    print("Veuillez choisir un personnage de l'équipe adverse à attaquer")
+                    
+                    if self.currentPlayer == "Joueur 1" {
+                        playerTwo.showTeam()
+                    }else {
+                        playerOne.showTeam()
+                    }
+                    
+                    let playerWhoIsAttacked = self.currentPlayer == "Joueur 1" ? playerTwo : playerOne
+                    if let characterToAttack = readLine(), !characterToAttack.isEmpty, characterToAttack != "0", Int(characterToAttack) ?? 99 <= playerWhoIsAttacked.characters.count{
+                        
+                        print("\(self.currentPlayer) vient d'attaquer")
+                        
+                    } else {
+                        choice = ""
+                        print("Merci de renseigner un numéro correct")
+                    }
+                    
+                } else {
+                    choice = ""
+                    print("Merci de renseigner un numéro correct")
+                }
+            } while choice.isEmpty
+        } while choice.isEmpty
     }
     
     func showWinner() {
