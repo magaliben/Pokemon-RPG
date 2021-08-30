@@ -54,7 +54,7 @@ struct Game {
                     //appeler la fonction permettant de soigner ou la fonction d'attaquer
                 } else {
                     print("""
-        Veuillez faire un choix entre
+        \(self.currentPlayer) Veuillez faire un choix entre
         1 : attaquer un personnage adverse
         2 : soigner un personnage de votre équipe
         """)
@@ -71,7 +71,8 @@ struct Game {
         }
     }
     
-    func attack() {
+    mutating func attack() {
+        
         print("Vous avez choisi d'attaquer un personnage adverse")
         print("Veuillez choisir un personnage de votre équipe pour attaquer votre adversaire")
         self.showPlayerTeam()
@@ -79,8 +80,8 @@ struct Game {
         repeat {
             let playerWhoAttacks = self.currentPlayer == "Joueur 1" ? playerOne : playerTwo
             repeat {
-                if let actionChoice = readLine(), !actionChoice.isEmpty, actionChoice != "0", Int(actionChoice) ?? 99 <= playerWhoAttacks.characters.count {
-                    choice = actionChoice
+                if let characterWhoAttacks = readLine(), !characterWhoAttacks.isEmpty, characterWhoAttacks >= "0", Int(characterWhoAttacks) ?? 99 <= playerWhoAttacks.characters.count {
+                    choice = characterWhoAttacks
                     
                     print("Veuillez choisir un personnage de l'équipe adverse à attaquer")
                     
@@ -91,15 +92,25 @@ struct Game {
                     }
                     
                     let playerWhoIsAttacked = self.currentPlayer == "Joueur 1" ? playerTwo : playerOne
-                    if let characterToAttack = readLine(), !characterToAttack.isEmpty, characterToAttack != "0", Int(characterToAttack) ?? 99 <= playerWhoIsAttacked.characters.count{
-                        
-                        print("\(self.currentPlayer) vient d'attaquer")
-                        
+                    if let characterToAttack = readLine(), !characterToAttack.isEmpty, characterToAttack >= "0", Int(characterToAttack) ?? 99 <= playerWhoIsAttacked.characters.count{
+                        if let indexOfCharacterToAttack = Int(characterToAttack) {
+                            if let indexOfCharacterWhoAttacks = Int(characterWhoAttacks) {
+                                playerWhoIsAttacked.characters[indexOfCharacterToAttack - 1].lifePoint -= playerWhoAttacks.characters[indexOfCharacterWhoAttacks - 1].weapon.damage
+                                print("\(self.currentPlayer) vient d'attaquer")
+                                self.switchPlayer()
+                                
+                            } else {
+                                choice = ""
+                                print("Merci de renseigner un numéro correct")
+                            }
+                        } else {
+                            choice = ""
+                            print("Merci de renseigner un numéro correct")
+                        }
                     } else {
                         choice = ""
                         print("Merci de renseigner un numéro correct")
                     }
-                    
                 } else {
                     choice = ""
                     print("Merci de renseigner un numéro correct")
