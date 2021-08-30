@@ -98,6 +98,8 @@ struct Game {
                                 playerWhoIsAttacked.characters[indexOfCharacterToAttack - 1].lifePoint -= playerWhoAttacks.characters[indexOfCharacterWhoAttacks - 1].weapon.damage
                                 print("\(self.currentPlayer) vient d'attaquer")
                                 self.switchPlayer()
+                                print("\(self.currentPlayer) Appuyer sur entrer pour jouer")
+                                
                                 
                             } else {
                                 choice = ""
