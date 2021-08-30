@@ -7,9 +7,13 @@
 
 import Foundation
 
-struct Player {
+class Player {
     let name: String
     var characters: [Character]
+    init(name: String,characters: [Character]) {
+        self.name = name
+        self.characters = characters
+    }
     
     /// This function shows the characters of the current player.
     ///
@@ -29,7 +33,7 @@ struct Player {
     /// - Parameter weapons: array of weapons.
     /// - Returns: Void.-*
     
-    mutating func createTeam(with weapons: [Weapon]) {
+ func createTeam(with weapons: [Weapon]) {
         var index = 0
         var name = ""
         
@@ -50,7 +54,7 @@ struct Player {
         } while index < 3
     }
     
-    mutating func treatCharacter(finished: () -> Void) {
+ func treatCharacter(finished: () -> Void) {
         var choice = ""
         repeat {
             if let actionChoice = readLine(), !actionChoice.isEmpty, actionChoice != "0", Int(actionChoice) ?? 99 <= self.characters.count {
