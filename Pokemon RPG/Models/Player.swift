@@ -19,11 +19,13 @@ class Player {
     ///
     /// - Parameter subject: No parameter.
     /// - Returns: Void.
-    func showTeam() {
-        print("L'équipe du \(self.name) est composée des personnages suivants : \n") // \n retour à la ligne
+    func showTeam(gameEnd: Bool = false) {
+        print("L'équipe du \(self.name) est composée des personnages suivants : \n") // \n retour à la ligne //The  (self.name) team consists of the following characters:
         //faire un for sur la let characters
         for (index, character) in characters.enumerated() { // character objet Character / characters objet tableau Character
-            print("\(index+1). \(character.name) à \(character.lifePoint) points de vie")
+            if character.lifePoint > 0 || gameEnd {
+                print("\(index+1). \(character.name) à \(character.lifePoint) points de vie et son arme est un \(character.weapon.name)") //health points and his weapon is
+            }
         }
         print("")
     }
@@ -33,7 +35,7 @@ class Player {
     /// - Parameter weapons: array of weapons.
     /// - Returns: Void.-*
     
- func createTeam(with weapons: [Weapon]) {
+    func createTeam(with weapons: [Weapon]) {
         var index = 0
         var name = ""
         
@@ -42,28 +44,38 @@ class Player {
         repeat {
             repeat {
                 print("Veuillez donner un nom à votre personnage \(index+1)")
-                if let choiceName = readLine(), !choiceName.isEmpty {
-                    name = choiceName
-                    self.characters.append(Character(name: name, weapon: weapons[index], lifePoint: 100))
-                    index += 1
+                if let choiceName = readLine() {
+                    
                     if index == 3 { print("\n") }
-                } else {
-                    print("Merci de renseigner un nom correct pour votre personnage")
+
+                    name = choiceName
+                    
+                    if  !choiceName.isEmpty, !namesOfCharacters.contains(name) {
+                        self.characters.append(Character(name: name, weapon: weapons[index], lifePoint: 100))
+                        index += 1
+                        namesOfCharacters.append(name)
+                    } else {
+                        if namesOfCharacters.contains(name) {
+                            print("Le nom de ce personne est déjà utilisé, merci d'en choisir un autre")
+                        } else {
+                            print("Merci de renseigner un nom correct pour votre personnage")
+                        }
+                    }
                 }
-            } while name.isEmpty
+            } while name.isEmpty || namesOfCharacters.contains(name)
         } while index < 3
     }
     
- func treatCharacter(finished: () -> Void) {
+    func treatCharacter(finished: () -> Void) {
         var choice = ""
         repeat {
             if let actionChoice = readLine(), !actionChoice.isEmpty, actionChoice != "0", Int(actionChoice) ?? 99 <= self.characters.count {
-               choice = actionChoice
+                choice = actionChoice
                 if let choiceInt = Int(choice) {
                     let index = choiceInt - 1
                     self.characters[index].treat()
                     finished()
-                   // print(self.characters[index].lifePoint) nombre de point de vie apres le soin
+                    // print(self.characters[index].lifePoint) nombre de point de vie apres le soin
                 }
             } else {
                 choice = ""

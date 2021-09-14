@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct Chest {
+ struct Chest {
     let randomWeapons = [Weapon(name: "Punch 👊🏻", damage: 5),
                          Weapon(name: "Fork 🍴", damage: 10),
                          Weapon(name: "Bomb 💣", damage: 95)]
     
-    func randomWeapon() -> Weapon {
+  mutating func randomWeapon() -> Weapon {
         let randomIndex = arc4random_uniform(3)
         return randomWeapons[Int(randomIndex)]
     }

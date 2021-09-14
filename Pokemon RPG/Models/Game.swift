@@ -9,6 +9,7 @@ import Foundation
 
 struct Game {
     
+    static var turnNurber = 1
     var currentPlayer = "Joueur 1"
     
     mutating func start() {
@@ -80,26 +81,25 @@ struct Game {
         repeat {
             let playerWhoAttacks = self.currentPlayer == "Joueur 1" ? playerOne : playerTwo
             repeat {
-                if let characterWhoAttacks = readLine(), !characterWhoAttacks.isEmpty, characterWhoAttacks >= "0", Int(characterWhoAttacks) ?? 99 <= playerWhoAttacks.characters.count {
+                if let characterWhoAttacks = readLine(), !characterWhoAttacks.isEmpty, characterWhoAttacks > "0", let characterWhoAttacksNumber = Int(characterWhoAttacks), characterWhoAttacksNumber <= playerWhoAttacks.characters.count, playerWhoAttacks.characters[characterWhoAttacksNumber - 1].lifePoint > 0 {
                     choice = characterWhoAttacks
                     
+                   // print("Surprise voici un coffre \(Chest.randomWeapon() -> Weapon)")
+    
                     print("Veuillez choisir un personnage de l'équipe adverse à attaquer")
                     
                     if self.currentPlayer == "Joueur 1" {
                         playerTwo.showTeam()
-                    }else {
+                    } else {
                         playerOne.showTeam()
                     }
                     
                     let playerWhoIsAttacked = self.currentPlayer == "Joueur 1" ? playerTwo : playerOne
-                    if let characterToAttack = readLine(), !characterToAttack.isEmpty, characterToAttack >= "0", Int(characterToAttack) ?? 99 <= playerWhoIsAttacked.characters.count{
+                    if let characterToAttack = readLine(), !characterToAttack.isEmpty, characterToAttack > "0", Int(characterToAttack) ?? 99 <= playerWhoIsAttacked.characters.count {
                         if let indexOfCharacterToAttack = Int(characterToAttack) {
                             if let indexOfCharacterWhoAttacks = Int(characterWhoAttacks) {
                                 playerWhoIsAttacked.characters[indexOfCharacterToAttack - 1].lifePoint -= playerWhoAttacks.characters[indexOfCharacterWhoAttacks - 1].weapon.damage
                                 print("\(self.currentPlayer) vient d'attaquer")
-                                self.switchPlayer()
-                                print("\(self.currentPlayer) Appuyer sur entrer pour jouer")
-                                
                                 
                             } else {
                                 choice = ""
@@ -119,18 +119,34 @@ struct Game {
                 }
             } while choice.isEmpty
         } while choice.isEmpty
-    }
-    
-    func showWinner() {
         
+        if !playerOne.hasTeamAlive() || !playerTwo.hasTeamAlive() {
+            self.showWinner()
+        } else {
+            self.switchPlayer()
+            print("\(self.currentPlayer) Appuyer sur entrer pour jouer")
+        }
     }
     
-    mutating func switchPlayer(){
+    mutating func showWinner() {
+        print("\(currentPlayer) à gagné la partie")
+        /*statistiques de jeu : le nombre de tours, et la liste des personnages des deux equipes avec leurs propriétés ( points de vie, nom et arme)*/
+        
+        playerOne.showTeam(gameEnd: true)
+        playerTwo.showTeam(gameEnd: true)
+        print("Voici le nombre de tours effectués par les joueurs: \(Game.turnNurber)")
+    }
+    
+    mutating func switchPlayer() {
         if self.currentPlayer == "Joueur 1" {
             self.currentPlayer  = "Joueur 2"
         } else {
             self.currentPlayer = "Joueur 1"
         }
-        
+        Game.turnNurber += 1
     }
 }
+// ajouter le nom de l'arme dans le print de la fornction showTeam
+// Faire en sort qu'il ne soit pas possible d'avoir 2 personnages ayant le meme nom
+// Ajouter l'affichage du coffre si le coffre est accepter changer l'arme du personnage
+
