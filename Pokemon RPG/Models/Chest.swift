@@ -7,12 +7,12 @@
 
 import Foundation
 
- struct Chest {
-    let randomWeapons = [Weapon(name: "Punch 👊🏻", damage: 5),
-                         Weapon(name: "Fork 🍴", damage: 10),
-                         Weapon(name: "Bomb 💣", damage: 95)]
+class Chest {
+    static let randomWeapons = [Weapon(name: "Punch 👊🏻", damage: 5), // tableau des armes (nom + dommage)qui seront proposer dans le coffre aléatoirement
+                                Weapon(name: "Fork 🍴", damage: 10),
+                                Weapon(name: "Bomb 💣", damage: 95)]
     
-  mutating func randomWeapon() -> Weapon {
+    static func randomWeapon() -> Weapon { // fonction qui permet de donner aléatoirement une arme
         let randomIndex = arc4random_uniform(3)
         return randomWeapons[Int(randomIndex)]
     }
