@@ -8,10 +8,12 @@
 import Foundation
 
 class Player {
-    let name: String
-    var characters: [Character]
+    
+    private let name: String
     private var isChestAlreadyProposed = false
-
+    
+    var characters: [Character]
+    
     init(name: String, characters: [Character]) {
         self.name = name
         self.characters = characters
@@ -21,13 +23,13 @@ class Player {
     ///
     /// - Parameter subject: No parameter.
     /// - Returns: Void.
-    func showTeam(gameEnd: Bool = false) { // fonction qui permet de faire apparaitre l'équipe créer
-        print("L'équipe du \(self.name) est composée des personnages suivants : \n") // \n retour à la ligne //The  (self.name) team consists of the following characters:
+    func showTeam(gameEnd: Bool = false) { // fonction qui permet de faire apparaître l'équipe créér
+        print("L'équipe du \(self.name) est composée des personnages suivants : \n") // \n retour à la ligne
         //faire un for sur la let characters
         for (index, character) in characters.enumerated() { // character objet Character / characters objet tableau Character
             if character.lifePoint > 0 || gameEnd {
-                print("\(index+1). \(character.name) à \(character.lifePoint) points de vie et son arme est un \(character.weapon.name)") //health points and his weapon is
-            } // ajouter le nom de l'arme dans le print de la fornction showTeam
+                print("\(index+1). \(character.name) à \(character.lifePoint) points de vie et son arme est un \(character.weapon.name)")
+            }
         }
         print("")
     }
@@ -37,7 +39,7 @@ class Player {
     /// - Parameter weapons: array of weapons.
     /// - Returns: Void.-*
     
-    func createTeam(with weapons: [Weapon]) { // fonction qui permet de crée l'équipe composé des 3 personnages
+    func createTeam(with weapons: [Weapon]) { // fonction qui permet de créer l'équipe composée des 3 personnages
         var index = 0
         var name = ""
         
@@ -49,8 +51,8 @@ class Player {
                 
                 name = choiceName
                 
-                if !choiceName.isEmpty, !namesOfCharacters.contains(name) { // Faire en sort qu'il ne soit pas possible d'avoir 2 personnages ayant le meme nom (creation d'un tableau namesofcharacter dans global)
-                    self.characters.append(Character(index: index, name: name, weapon: weapons[index], lifePoint: 100))
+                if !choiceName.isEmpty, !namesOfCharacters.contains(name) { // Faire en sorte qu'il ne soit pas possible d'avoir 2 personnages ayant le même nom (création d'un tableau namesofcharacter dans global)
+                    self.characters.append(Character(index: index, name: name, lifePoint: 100, weapon: weapons[index]))
                     if index == 2 { print("\n") }
                     namesOfCharacters.append(name)
                     index += 1
@@ -62,7 +64,7 @@ class Player {
                     }
                 }
             }
-        } while name == "" || index <= 2 // le nom du personnage ne doit pas etre vide et ne pas depasser 3 personnages
+        } while name == "" || index <= 2 // le nom du personnage ne doit pas être vide et ne pas dépasser 3 personnages
     }
     
     func treatCharacter(finished: () -> Void) { // fonction pour soigner
@@ -74,7 +76,7 @@ class Player {
                     let index = choiceInt - 1
                     self.characters[index].treat()
                     finished()
-                    // print(self.characters[index].lifePoint) nombre de point de vie apres le soin
+                    // print(self.characters[index].lifePoint) nombre de point de vie après le soin
                 }
             } else {
                 choice = ""
@@ -83,15 +85,15 @@ class Player {
         } while choice.isEmpty
     }
     
-    func hasTeamAlive() -> Bool { // fonction qui permet d'incrementer les points de vie au personnages
+    func hasTeamAlive() -> Bool { // fonction qui permet d'incrémenter les points de vie aux personnages
         var teamHealth = 0
         for character in self.characters {
             teamHealth += character.lifePoint
         }
-        return teamHealth > 0 // permet de faire disparaitre le personnage lorsqu'il n'a plus de point de vie
+        return teamHealth > 0 // permet de faire disparaître le personnage lorsqu'il n'a plus de point de vie
     }
     
-    // Ajouter l'affichage du coffre si le coffre est accepter changer l'arme du personnage
+    // Ajouter l'affichage du coffre si le coffre est accepté changer l'arme du personnage
     // Check if player has already had a chest and if no -> then propose one randomly
     func randomWeaponMayAppear(for character: Character) {
         if !self.isChestAlreadyProposed {

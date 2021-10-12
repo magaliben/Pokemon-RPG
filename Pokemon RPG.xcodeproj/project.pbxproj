@@ -58,7 +58,6 @@
 				1034FC29266F9545006AF8B0 /* Player.swift */,
 				1034FC27266F9537006AF8B0 /* Character.swift */,
 				1034FC25266F934B006AF8B0 /* Weapon.swift */,
-				104875C126B1667A000A6719 /* globals.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -83,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				10D3700B265FB11A00EF1611 /* main.swift */,
+				104875C126B1667A000A6719 /* globals.swift */,
 				10B1203526A5915C008FA3E0 /* Models */,
 			);
 			path = "Pokemon RPG";

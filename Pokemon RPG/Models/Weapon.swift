@@ -4,15 +4,14 @@
 //
 //  Created by Magali Bensalah on 08/06/2021.
 //
-
-import Foundation
-
 class Weapon {
-    let name: String
     let damage: Int
+    let name: String
     
-    init(name: String, damage: Int) {
-        self.name = name
+    
+    init(damage: Int, name: String) {
+        
         self.damage = damage
+        self.name = name
     }
 }

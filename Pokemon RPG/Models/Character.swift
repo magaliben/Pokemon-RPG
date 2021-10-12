@@ -4,13 +4,10 @@
 //
 //  Created by Magali Bensalah on 08/06/2021.
 //
-
-import Foundation
-
 class Character {
     let index: Int
     let name: String
-    var weapon: Weapon
+    
     var lifePoint: Int {
         didSet {
             if lifePoint < 0 {
@@ -18,15 +15,16 @@ class Character {
             }
         }
     }
+    var weapon: Weapon
     
-    init(index: Int, name: String, weapon: Weapon, lifePoint: Int) {
+    init(index: Int, name: String, lifePoint: Int, weapon: Weapon) {
         self.index = index
         self.name = name
-        self.weapon = weapon
         self.lifePoint = lifePoint
+        self.weapon = weapon
     }
     
-    func treat() { // fonction qui permet de donner 15 points de soin au joueur qui à choisi de soigner un de ses personnages
+    func treat() { // fonction qui permet de donner 15 points de soin au joueur qui a choisi de soigner un de ses personnages
         self.lifePoint += 15
     }
     

@@ -9,10 +9,17 @@ import Foundation
 
 class Game {
     
-    static var turnNumber = 1
-    var currentPlayer = "Joueur 1"
+    // MARK: Internal property
     
-    func start() { // fonction de lancement du jeu 
+    static var turnNumber = 1
+    
+    // MARK: Private property
+    
+    private var currentPlayer = "Joueur 1"
+    
+    // MARK: Internal functions
+    
+    func start() { // fonction de lancement du jeu
         playerOne.createTeam(with: playerOneWeapons)
         playerTwo.createTeam(with: playerTwoWeapons)
         print("Appuyez sur la touche entrée pour commencer la partie")
@@ -21,7 +28,33 @@ class Game {
         }
     }
     
-    func startBattle() { // fonction qui permet de démarrer le jeu avec le choix d'attaquer ou de soigner
+    func characterToAttack(_ indexOfCharacterWhoAttacks: Int, _ playerWhoAttacks: Player) { // fonction qui permet de choisir qui attaque qui
+        print("Veuillez choisir un personnage de l'équipe adverse à attaquer")
+        
+        if self.currentPlayer == "Joueur 1" {
+            playerTwo.showTeam()
+        } else {
+            playerOne.showTeam()
+        }
+        
+        let playerWhoIsAttacked = self.currentPlayer == "Joueur 1" ? playerTwo : playerOne
+        if let characterToAttack = readLine(), !characterToAttack.isEmpty, characterToAttack > "0", Int(characterToAttack) ?? 99 <= playerWhoIsAttacked.characters.count {
+            if let indexOfCharacterToAttack = Int(characterToAttack) {
+                playerWhoIsAttacked.characters[indexOfCharacterToAttack - 1].lifePoint -= playerWhoAttacks.characters[indexOfCharacterWhoAttacks].weapon.damage
+                print("\(self.currentPlayer) vient d'attaquer")
+            } else {
+                print("Merci de renseigner un numéro correct")
+                self.characterToAttack(indexOfCharacterWhoAttacks, playerWhoAttacks)
+            }
+        } else {
+            print("Merci de renseigner un numéro correct")
+            self.characterToAttack(indexOfCharacterWhoAttacks, playerWhoAttacks)
+        }
+    }
+    
+    // MARK: Private functions
+    
+    private func startBattle() { // fonction qui permet de démarrer le jeu avec le choix d'attaquer ou de soigner
         repeat {
             print("""
         \(self.currentPlayer) souhaitez-vous
@@ -64,7 +97,7 @@ class Game {
         } while playerOne.hasTeamAlive() && playerTwo.hasTeamAlive()
     }
     
-    func showPlayerTeam() { // fonction qui permet d'appeller soit l'equipe du joueur 1 soit le joueur 2
+    private func showPlayerTeam() { // fonction qui permet d'appeller soit l'équipe du joueur 1 soit le joueur 2
         if self.currentPlayer == "Joueur 1" {
             playerOne.showTeam()
         } else {
@@ -72,7 +105,7 @@ class Game {
         }
     }
     
-    func attack() { // fonction attaque
+    private func attack() { // fonction attaque
         print("Vous avez choisi d'attaquer un personnage adverse")
         print("Veuillez choisir un personnage de votre équipe pour attaquer votre adversaire")
         self.showPlayerTeam()
@@ -99,40 +132,19 @@ class Game {
         }
     }
     
-    func characterToAttack(_ indexOfCharacterWhoAttacks: Int, _ playerWhoAttacks: Player) { // fonction qui permet de choisir qui attaque qui
-        print("Veuillez choisir un personnage de l'équipe adverse à attaquer")
-        
-        if self.currentPlayer == "Joueur 1" {
-            playerTwo.showTeam()
-        } else {
-            playerOne.showTeam()
-        }
-        
-        let playerWhoIsAttacked = self.currentPlayer == "Joueur 1" ? playerTwo : playerOne
-        if let characterToAttack = readLine(), !characterToAttack.isEmpty, characterToAttack > "0", Int(characterToAttack) ?? 99 <= playerWhoIsAttacked.characters.count {
-            if let indexOfCharacterToAttack = Int(characterToAttack) {
-                playerWhoIsAttacked.characters[indexOfCharacterToAttack - 1].lifePoint -= playerWhoAttacks.characters[indexOfCharacterWhoAttacks].weapon.damage
-                print("\(self.currentPlayer) vient d'attaquer")
-            } else {
-                print("Merci de renseigner un numéro correct")
-                self.characterToAttack(indexOfCharacterWhoAttacks, playerWhoAttacks)
-            }
-        } else {
-            print("Merci de renseigner un numéro correct")
-            self.characterToAttack(indexOfCharacterWhoAttacks, playerWhoAttacks)
-        }
-    }
     
-    func showWinner() { // fonction qui permet de définir qui est ce qui a gagné, les statistiques de chaque joueur et le nombre de tour joué
+    private func showWinner() { // fonction qui permet de définir qui a gagné, les statistiques de chaque joueur et le nombre de tour joué
         print("\(currentPlayer) à gagné la partie")
-        /*statistiques de jeu : le nombre de tours, et la liste des personnages des deux equipes avec leurs propriétés ( points de vie, nom et arme)*/
+        /*statistiques de jeu : le nombre de tours, et la liste des personnages des deux équipes avec leurs propriétés ( points de vie, nom et arme)*/
         
         playerOne.showTeam(gameEnd: true)
         playerTwo.showTeam(gameEnd: true)
         print("Voici le nombre de tours effectués par les joueurs: \(Game.turnNumber)")
+        
+        exit(0)
     }
     
-    func switchPlayer() { // fonction qui permet de passer d'un joueur à un autre
+    private func switchPlayer() { // fonction qui permet de passer d'un joueur à un autre
         if self.currentPlayer == "Joueur 1" {
             self.currentPlayer  = "Joueur 2"
         } else {
